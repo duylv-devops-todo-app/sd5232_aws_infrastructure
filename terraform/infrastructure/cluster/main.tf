@@ -152,7 +152,7 @@ resource "aws_security_group" "ec2_sg" {
 # ECR
 ###########################################################################################
 resource "aws_ecr_repository" "example" {
-  name = "example-ecr-repo"
+  name = var.ecr_name
   image_scanning_configuration {
     scan_on_push = true
   }
@@ -160,14 +160,11 @@ resource "aws_ecr_repository" "example" {
     encryption_type = "AES256"
   }
 
-  tags = {
-    Team        = "DevOps"
-  }
-}
+  force_delete = true
 
-output "ecr_repository_url" {
-  value       = aws_ecr_repository.example.repository_url
-  description = "The URL of the ECR repository"
+  tags = {
+    Team = "DevOps"
+  }
 }
 
 
@@ -177,11 +174,11 @@ output "ecr_repository_url" {
 resource "aws_instance" "my_instance" {
   ami                         = var.ami_id
   instance_type               = var.instance_type
-  vpc_security_group_ids = [aws_security_group.ec2_sg.id]
+  vpc_security_group_ids      = [aws_security_group.ec2_sg.id]
   subnet_id                   = module.vpc_and_subnets.public_subnets[0]
   associate_public_ip_address = true
 
-  user_data = file("install.sh")
+  user_data = file("install.sh") # install needed stuff on start up.
 
   tags = {
     Name = local.ec2_name
