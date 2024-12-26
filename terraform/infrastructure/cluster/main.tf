@@ -2,20 +2,22 @@ provider "aws" {
   region = var.aws_region
 }
 
-# to retrieve the availability zones
 data "aws_availability_zones" "available" {}
 data "aws_caller_identity" "current" {}
 
 locals {
 
-  public_subnets = ["10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24"]
-  private_subnets = ["10.0.4.0/24", "10.0.5.0/24", "10.0.6.0/24"]
-  intra_subnets = ["10.0.7.0/24", "10.0.8.0/24", "10.0.9.0/24"]
+  azs = ["us-east-1a", "us-east-1b", "us-east-1c"]
+
+  public_subnets  = ["10.0.1.0/24", "10.0.2.0/24"]
+  private_subnets = ["10.0.4.0/24", "10.0.5.0/24"]
+  intra_subnets   = ["10.0.7.0/24", "10.0.8.0/24"]
 
   ebs_csi_service_account_namespace = "kube-system"
   ebs_csi_service_account_name      = "ebs-csi-controller-sa"
 
   ec2_name = "my-ec2-instance"
+
 }
 
 ###########################################################################################
@@ -30,7 +32,7 @@ module "vpc_and_subnets" {
   name = var.vpc_name
 
   # availability zones
-  azs = ["us-east-1a", "us-east-1b", "us-east-1c"]
+  azs = local.azs
 
   # vpc cidr
   cidr = var.vpc_cidr
@@ -38,16 +40,16 @@ module "vpc_and_subnets" {
   # public and private subnets
   private_subnets = local.private_subnets
   public_subnets  = local.public_subnets
-  intra_subnets = local.intra_subnets
+  intra_subnets   = local.intra_subnets
 
   # create nat gateways
-  enable_nat_gateway = var.enable_nat_gateway
-  single_nat_gateway = var.single_nat_gateway
-  one_nat_gateway_per_az = false
+  enable_nat_gateway      = var.enable_nat_gateway
+  single_nat_gateway      = var.single_nat_gateway
+  one_nat_gateway_per_az  = false
 
   # enable dns hostnames and support
-  enable_dns_hostnames = true
-  enable_dns_support = var.enable_dns_support
+  enable_dns_hostnames    = true
+  enable_dns_support      = var.enable_dns_support
 
   # tags for public, private subnets and vpc
   tags               = var.tags
@@ -140,6 +142,7 @@ module "eks" {
     }
   }
 
+  # work around for issue https://stackoverflow.com/questions/74687452/eks-error-syncing-load-balancer-failed-to-ensure-load-balancer-multiple-tagge
   node_security_group_tags = {
     "kubernetes.io/cluster/${var.eks_cluster_name}" = null
   }
@@ -168,7 +171,7 @@ module "eks" {
       max_size     = 2
       desired_size = 1
 
-#       instance_types = ["t3.large"]
+      # instance_types = ["t3.large"]
       instance_types = ["t2.medium"]
       capacity_type = "SPOT"
     }
