@@ -10,8 +10,8 @@ locals {
   azs = ["us-east-1a", "us-east-1b", "us-east-1c"]
 
   public_subnets  = ["10.0.1.0/24", "10.0.2.0/24"]
-  private_subnets = ["10.0.4.0/24", "10.0.5.0/24"]
-  intra_subnets   = ["10.0.7.0/24", "10.0.8.0/24"]
+  private_subnets = ["10.0.3.0/24", "10.0.4.0/24"]
+  intra_subnets   = ["10.0.5.0/24", "10.0.6.0/24"]
 
   ebs_csi_service_account_namespace = "kube-system"
   ebs_csi_service_account_name      = "ebs-csi-controller-sa"
@@ -88,7 +88,7 @@ resource "aws_security_group" "ec2_sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  # Allow access for Jenkins
+  # Allow access for Jenkinsfile
   ingress {
     from_port = 8080
     to_port   = 8080
