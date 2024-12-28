@@ -1,0 +1,57 @@
+pipeline {
+    agent any
+
+    environment {
+        AWS_ACCESS_KEY_ID = credentials('AWS_ACCESS_KEY_ID')
+        AWS_SECRET_ACCESS_KEY = credentials('AWS_SECRET_ACCESS_KEY')
+        AWS_DEFAULT_REGION = ${env.AWS_REGION}
+
+        eksClusterName = ${env.CLUSTER_NAME}
+        registry = "${env.ECR_URL}"
+        registryCredential = "${env.AWS_CREDENTIAL_ID}"
+
+        app_name = "frontend"
+        version = "latest"
+    }
+
+    stages {
+        stage('Build') {
+            steps {
+                echo "Building ${app_name} image: ${registry}:${app_name}:${version}"
+            }
+        }
+
+        stage('Deploy') {
+            steps
+            {
+                withCredentials([[
+                        $class: 'AmazonWebServicesCredentialsBinding',
+                        credentialsId: "aws-credentials",
+                        accessKeyVariable: 'AWS_ACCESS_KEY_ID',
+                        secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
+                ]])
+                {
+                    script
+                    {
+                        docker.withRegistry("https://${registry}", "ecr:us-east-1:${registryCredential}") {
+                            sh """
+                            export APP_NAME=${app_name}; export VERSION=${version}; export REGISTRY=${registry};
+                            sh "aws eks --region ${AWS_DEFAULT_REGION} update-kubeconfig --name ${eksClusterName}"
+                            sh "kubectl apply -f frontend.yaml
+                            """
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    post {
+        success {
+            echo "Deployment successful"
+        }
+        failure {
+            echo "Deployment failed"
+        }
+    }
+}

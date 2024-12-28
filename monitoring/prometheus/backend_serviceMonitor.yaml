@@ -1,0 +1,16 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: backend
+  labels:
+    name: backend
+spec:
+  namespaceSelector:
+    matchNames:
+      - eks-ns
+  endpoints:
+    - path: /api/metrics
+      interval: 30s
+  selector:
+    matchLabels:
+      app: backend

@@ -1,0 +1,18 @@
+adminPassword: Pa55w0rd
+
+persistence:
+  enabled: true
+  storageClassName: gp2
+
+service:
+  type: LoadBalancer
+
+datasources:
+  datasources.yaml:
+    apiVersion: 1
+    datasources:
+      - name: Prometheus
+        type: prometheus
+        url: http://prometheus-server.default.svc.cluster.local
+        access: proxy
+        isDefault: true
