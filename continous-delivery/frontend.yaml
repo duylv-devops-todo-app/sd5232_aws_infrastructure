@@ -1,10 +1,10 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: ${APP_NAME}
+  name: ${name}
 spec:
   selector:
-    app: ${APP_NAME}
+    app: ${name}
   ports:
     - port: 3000
       protocol: TCP
@@ -15,20 +15,20 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: ${APP_NAME}
+  name: ${name}
 spec:
   selector:
     matchLabels:
-      app: ${APP_NAME}
+      app: ${name}
   replicas: 1
   template:
     metadata:
       labels:
-        app: ${APP_NAME}
+        app: ${name}
     spec:
       containers:
         - name: react-app
-          image: ${REGISTRY}:${APP_NAME}:${VERSION}
+          image: ${registry}:${name}:${version}
           imagePullPolicy: Always
           ports:
             - containerPort: 3000
