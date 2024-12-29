@@ -28,7 +28,7 @@ pipeline {
                     secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
                 ]]) {
                     sh '''
-                        export APP_NAME="${app_name}";
+                        export NAME="${app_name}";
                         export VERSION="${version}";
                         export REGISTRY="${registry}";
                         cd /var/lib/jenkins/workspace/backend-cd-pipeline/continous-delivery && pwd
