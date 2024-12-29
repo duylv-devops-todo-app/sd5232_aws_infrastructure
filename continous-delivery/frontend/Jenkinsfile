@@ -34,7 +34,7 @@ pipeline {
                         export name="${app_name}";
                         export version="${version}";
                         export registry="${registry}";
-                        envsubst < /var/lib/jenkins/workspace/backend-cd-pipeline/continous-delivery/frontend.yaml > /var/lib/jenkins/workspace/frontend-cd-pipeline/continous-delivery/frontend-processed.yaml
+                        envsubst < /var/lib/jenkins/workspace/frontend-cd-pipeline/continous-delivery/frontend.yaml > /var/lib/jenkins/workspace/frontend-cd-pipeline/continous-delivery/frontend-processed.yaml
                         cd /var/lib/jenkins/workspace/frontend-cd-pipeline/continous-delivery && pwd
                         aws eks --region "${AWS_DEFAULT_REGION}" update-kubeconfig --name "${eksClusterName}"
                         kubectl apply -f frontend-processed.yaml
