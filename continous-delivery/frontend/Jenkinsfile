@@ -9,7 +9,10 @@ pipeline {
         registryCredential = "${env.AWS_CREDENTIAL_ID}"
 
         app_name = "frontend"
-        version = string(name: 'version', defaultValue: 'latest', description: 'Application Version')
+    }
+
+    parameters {
+        string(name: 'version', defaultValue: 'latest', description: 'Application Version')
     }
 
     stages {
