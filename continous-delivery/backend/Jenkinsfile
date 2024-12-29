@@ -32,8 +32,8 @@ pipeline {
                         export VERSION="${version}";
                         export REGISTRY="${registry}";
                         aws eks --region "${AWS_DEFAULT_REGION}" update-kubeconfig --name "${eksClusterName}"
-                        kubectl apply -f mongodb.yaml
-                        kubectl apply -f backend.yaml
+                        kubectl apply -f ../mongodb.yaml
+                        kubectl apply -f ../backend.yaml
                     '''
                 }
             }
