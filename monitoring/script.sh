@@ -20,5 +20,4 @@ helm repo update
 kubectl create namespace grafana
 helm install grafana grafana/grafana --values ./grafana/grafana.yaml
 
-
 kubectl get pods --all-namespaces

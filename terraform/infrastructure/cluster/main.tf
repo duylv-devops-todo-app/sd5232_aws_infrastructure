@@ -181,21 +181,37 @@ module "eks" {
 ###########################################################################################
 # ECR
 ###########################################################################################
-# resource "aws_ecr_repository" "cluster_ecr" {
-#   name = var.ecr_name
-#   image_scanning_configuration {
-#     scan_on_push = true
-#   }
-#   encryption_configuration {
-#     encryption_type = "AES256"
-#   }
-#
-#   force_delete = true
-#
-#   tags = {
-#     Team = "DevOps"
-#   }
-# }
+resource "aws_ecr_repository" "cluster_ecr_fe" {
+  name = var.ecr_fe_name
+  image_scanning_configuration {
+    scan_on_push = true
+  }
+  encryption_configuration {
+    encryption_type = "AES256"
+  }
+
+  force_delete = true
+
+  tags = {
+    Team = "DevOps"
+  }
+}
+
+resource "aws_ecr_repository" "cluster_ecr_be" {
+  name = var.ecr_be_name
+  image_scanning_configuration {
+    scan_on_push = true
+  }
+  encryption_configuration {
+    encryption_type = "AES256"
+  }
+
+  force_delete = true
+
+  tags = {
+    Team = "DevOps"
+  }
+}
 
 ###########################################################################################
 # ebs csi

@@ -150,8 +150,13 @@ variable "eks_security_group_id" {
 ###########################################################################################
 # ECR variable
 ###########################################################################################
-variable "ecr_name" {
+variable "ecr_be_name" {
   type        = string
   description = "ECR Name"
-  default     = "sd5232_ecr"
+  default     = "sd5232_ecr_be"
+}
+variable "ecr_fe_name" {
+  type        = string
+  description = "ECR Name"
+  default     = "sd5232_ecr_fe"
 }
