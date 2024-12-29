@@ -20,20 +20,20 @@ pipeline {
         }
 
         stage('Deploy') {
-            steps
-            {
+            steps {
                 withCredentials([[
-                        $class: 'AmazonWebServicesCredentialsBinding',
-                        credentialsId: "user-aws",
-                        accessKeyVariable: 'AWS_ACCESS_KEY_ID',
-                        secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
-                ]])
-                {
+                    $class: 'AmazonWebServicesCredentialsBinding',
+                    credentialsId: 'user-aws',
+                    accessKeyVariable: 'AWS_ACCESS_KEY_ID',
+                    secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
+                ]]) {
                     sh """
-                            export APP_NAME=${app_name}; export VERSION=${version}; export REGISTRY=${registry};
-                            sh "aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | docker login --username AWS --password-stdin ${registry}"
-                            sh "aws eks --region ${AWS_DEFAULT_REGION} update-kubeconfig --name ${eksClusterName}"
-                            sh "kubectl apply -f backend.yaml
+                        export APP_NAME=${app_name};
+                        export VERSION=${version};
+                        export REGISTRY=${registry};
+                        aws eks --region ${AWS_DEFAULT_REGION} update-kubeconfig --name ${eksClusterName}
+                        kubectl apply -f mongodb.yaml
+                        kubectl apply -f backend.yaml
                     """
                 }
             }
