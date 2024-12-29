@@ -34,7 +34,7 @@ pipeline {
                         cd /var/lib/jenkins/workspace/backend-cd-pipeline/continous-delivery && pwd
                         aws eks --region "${AWS_DEFAULT_REGION}" update-kubeconfig --name "${eksClusterName}"
                         kubectl apply -f mongodb.yaml
-                        kubectl apply -f ./backend/backend.yaml
+                        kubectl apply -f backend.yaml
                     '''
                 }
             }
