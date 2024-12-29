@@ -27,14 +27,14 @@ pipeline {
                     accessKeyVariable: 'AWS_ACCESS_KEY_ID',
                     secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
                 ]]) {
-                    sh """
-                        export APP_NAME=${app_name};
-                        export VERSION=${version};
-                        export REGISTRY=${registry};
-                        aws eks --region ${AWS_DEFAULT_REGION} update-kubeconfig --name ${eksClusterName}
+                    sh '''
+                        export APP_NAME="${app_name}";
+                        export VERSION="${version}";
+                        export REGISTRY="${registry}";
+                        aws eks --region "${AWS_DEFAULT_REGION}" update-kubeconfig --name "${eksClusterName}"
                         kubectl apply -f mongodb.yaml
                         kubectl apply -f backend.yaml
-                    """
+                    '''
                 }
             }
         }
