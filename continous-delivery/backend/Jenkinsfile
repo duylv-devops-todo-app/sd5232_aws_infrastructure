@@ -5,7 +5,7 @@ pipeline {
         AWS_DEFAULT_REGION = "${env.AWS_REGION}"
 
         eksClusterName = "${env.CLUSTER_NAME}"
-        registry = "${env.ECR_URL}"
+        registry = "${env.BE_REGISTRY}"
         registryCredential = "${env.AWS_CREDENTIAL_ID}"
 
         app_name = "backend"
