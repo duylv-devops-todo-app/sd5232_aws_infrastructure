@@ -27,7 +27,7 @@ spec:
     spec:
       containers:
         - name: ${name}
-          image: ${registry}:${name}:${version}
+          image: ${registry}:${version}
           imagePullPolicy: Always
           ports:
             - containerPort: 3000
