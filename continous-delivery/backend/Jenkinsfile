@@ -5,7 +5,7 @@ pipeline {
         AWS_DEFAULT_REGION = "${env.AWS_REGION}"
 
         eksClusterName = "${env.CLUSTER_NAME}"
-        registry = "${env.ECR_URL}"
+        registry = "${env.BE_REGISTRY}"
         registryCredential = "${env.AWS_CREDENTIAL_ID}"
 
         app_name = "backend"
@@ -28,12 +28,14 @@ pipeline {
                     secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
                 ]]) {
                     sh '''
-                        export APP_NAME="${app_name}";
-                        export VERSION="${version}";
-                        export REGISTRY="${registry}";
+                        export name="${app_name}";
+                        export version="${version}";
+                        export registry="${registry}";
+                        envsubst < /var/lib/jenkins/workspace/backend-cd-pipeline/continous-delivery/backend.yaml > /var/lib/jenkins/workspace/backend-cd-pipeline/continous-delivery/backend-processed.yaml
+                        cd /var/lib/jenkins/workspace/backend-cd-pipeline/continous-delivery && pwd
                         aws eks --region "${AWS_DEFAULT_REGION}" update-kubeconfig --name "${eksClusterName}"
                         kubectl apply -f mongodb.yaml
-                        kubectl apply -f backend.yaml
+                        kubectl apply -f backend-processed.yaml
                     '''
                 }
             }
