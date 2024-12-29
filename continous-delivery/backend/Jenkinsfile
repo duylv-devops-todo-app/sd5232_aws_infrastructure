@@ -29,17 +29,12 @@ pipeline {
                         secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
                 ]])
                 {
-                    script
-                    {
-                        docker.withRegistry("https://${registry}", "ecr:us-east-1:${registryCredential}") {
-                            sh """
+                    sh """
                             export APP_NAME=${app_name}; export VERSION=${version}; export REGISTRY=${registry};
                             sh "aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | docker login --username AWS --password-stdin ${registry}"
                             sh "aws eks --region ${AWS_DEFAULT_REGION} update-kubeconfig --name ${eksClusterName}"
                             sh "kubectl apply -f backend.yaml
-                            """
-                        }
-                    }
+                    """
                 }
             }
         }
