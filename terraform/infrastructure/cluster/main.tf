@@ -88,11 +88,11 @@ resource "aws_security_group" "ec2_sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  # Allow access for Jenkinsfile
+  # Allow access for Jenkins
   ingress {
-    from_port = 8080
-    to_port   = 8080
-    protocol  = "tcp"
+    from_port   = 8080
+    to_port     = 8080
+    protocol    = "tcp"
     cidr_blocks = [var.allow_ssh_cidr]
   }
 
@@ -171,8 +171,8 @@ module "eks" {
       max_size     = 2
       desired_size = 1
 
-      # instance_types = ["t3.large"]
-      instance_types = ["t2.medium"]
+      instance_types = ["t3.large"]
+#       instance_types = ["t2.medium"]
       capacity_type = "SPOT"
     }
   }
